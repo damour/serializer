@@ -183,6 +183,10 @@ final class GraphNavigator
                     $metadata = $this->resolveMetadata($context, $data, $metadata);
                 }
 
+                if ($context instanceof DeserializationContext && ! empty($metadata->contentDiscriminatorMap) && $type['name'] === $metadata->contentDiscriminatorBaseClass) {
+                    $metadata = $this->resolveContentDiscriminatorMetadata($context, $data, $metadata);
+                }
+
                 if (null !== $exclusionStrategy && $exclusionStrategy->shouldSkipClass($metadata, $context)) {
                     $this->leaveScope($context, $data);
 
@@ -270,6 +274,17 @@ final class GraphNavigator
         }
 
         return $this->metadataFactory->getMetadataForClass($metadata->discriminatorMap[$typeValue]);
+    }
+
+    private function resolveContentDiscriminatorMetadata(DeserializationContext $context, $data, ClassMetadata $metadata)
+    {
+        foreach ($metadata->contentDiscriminatorMap as $class => $fields) {
+            if (count($fields) == count(array_intersect($fields, array_keys((array) $data)))) {
+                return $this->metadataFactory->getMetadataForClass($class);
+            }
+        }
+
+        throw new \LogicException('Values in contentDiscriminator not found');
     }
 
     private function leaveScope(Context $context, $data)

@@ -19,6 +19,7 @@
 namespace JMS\Serializer\Metadata\Driver;
 
 use JMS\Serializer\Annotation\Discriminator;
+use JMS\Serializer\Annotation\ContentDiscriminator;
 use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\Annotation\HandlerCallback;
 use JMS\Serializer\Annotation\AccessorOrder;
@@ -98,6 +99,12 @@ class AnnotationDriver implements DriverInterface
                     $classMetadata->discriminatorDisabled = true;
                 } else {
                     $classMetadata->setDiscriminator($annot->field, $annot->map);
+                }
+            } elseif ($annot instanceof ContentDiscriminator) {
+                if ($annot->disabled) {
+                    $classMetadata->discriminatorDisabled = true;
+                } else {
+                    $classMetadata->setContentDiscriminator($annot->map);
                 }
             }
         }

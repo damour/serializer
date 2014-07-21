@@ -56,6 +56,8 @@ class ClassMetadata extends MergeableClassMetadata
     public $discriminatorFieldName;
     public $discriminatorValue;
     public $discriminatorMap = array();
+    public $contentDiscriminatorBaseClass;
+    public $contentDiscriminatorMap = array();
 
     public function setDiscriminator($fieldName, array $map)
     {
@@ -70,6 +72,16 @@ class ClassMetadata extends MergeableClassMetadata
         $this->discriminatorBaseClass = $this->name;
         $this->discriminatorFieldName = $fieldName;
         $this->discriminatorMap = $map;
+    }
+
+    public function setContentDiscriminator(array $map)
+    {
+        if (empty($map)) {
+            throw new \InvalidArgumentException('The discriminator map cannot be empty.');
+        }
+
+        $this->contentDiscriminatorBaseClass = $this->name;
+        $this->contentDiscriminatorMap = $map;
     }
 
     /**
