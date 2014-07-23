@@ -154,6 +154,8 @@ class ClassMetadata extends MergeableClassMetadata
         $this->xmlRootName = $object->xmlRootName;
         $this->xmlRootNamespace = $object->xmlRootNamespace;
         $this->xmlNamespaces = array_merge($this->xmlNamespaces, $object->xmlNamespaces);
+        $this->contentDiscriminatorBaseClass = $object->contentDiscriminatorBaseClass;
+        $this->contentDiscriminatorMap = $object->contentDiscriminatorMap;
 
         // Handler methods are taken from the outer class completely.
         $this->handlerCallbacks = $object->handlerCallbacks;
